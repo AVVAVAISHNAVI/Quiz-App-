@@ -30,8 +30,6 @@
     <h1>Welcome to the Web Development Quiz</h1>
     <p class="description">Choose a topic to start:</p>
     <ul class="quiz-list">
-
-     
       <li><a href="html-quiz.html"class="quiz-link quiz-item" tabindex="0">HTML Quiz</a></li>
       <li><a href="css-quiz.html"class="quiz-link quiz-item" tabindex="0">CSS Quiz</a></li>
       <li><a href="js-quiz.html"class="quiz-link quiz-item" tabindex="0">JavaScript Quiz</a></li>
@@ -43,8 +41,6 @@
       <li><a href="django-quiz.html" class="quiz-link quiz-item" tabindex="0">Django Quiz</a></li>
       <li><a href="dsa-quiz.html" class="quiz-link quiz-item" tabindex="0">DSA Quiz</a></li>
       <li><a href="dbms-quiz.html" class="quiz-link quiz-item" tabindex="0">DBMS Quiz</a></li>
-
-
     </ul>
   </div>
 <footer>
@@ -64,25 +60,85 @@
   </div>
 </footer>
 
-
-  
-  
-
 <div id="chatButton" onclick="toggleChatbot()">🤖</div>
 <div id="chatModal">
     <span id="closeChatbot" onclick="toggleChatbot()" title="Close">×</span>
     <iframe src="chatbot/chatbot.html"></iframe>
 </div>
 
-
-
 <script>
   function toggleChatbot() {
     const modal = document.getElementById("chatModal");
     modal.style.display = modal.style.display === "block" ? "none" : "block";
   }
+
+  /* -------------------------
+     Quiz Performance Analysis Tool
+  ------------------------- */
+  const quizPerformance = {
+    totalQuestions: 0,
+    attempted: 0,
+    correct: 0,
+    wrong: 0,
+    startTime: null,
+    endTime: null
+  };
+
+  // Call this when quiz starts
+  function startQuiz(totalQ) {
+    quizPerformance.totalQuestions = totalQ;
+    quizPerformance.attempted = 0;
+    quizPerformance.correct = 0;
+    quizPerformance.wrong = 0;
+    quizPerformance.startTime = Date.now();
+  }
+
+  // Call this when user submits an answer
+  function submitAnswer(isCorrect) {
+    quizPerformance.attempted++;
+    if (isCorrect) {
+      quizPerformance.correct++;
+    } else {
+      quizPerformance.wrong++;
+    }
+  }
+
+  // Call this when quiz ends
+  function endQuiz() {
+    quizPerformance.endTime = Date.now();
+    const timeTaken = ((quizPerformance.endTime - quizPerformance.startTime) / 1000).toFixed(2);
+
+    // Show result in floating box
+    const perfDiv = document.createElement("div");
+    perfDiv.style.position = "fixed";
+    perfDiv.style.bottom = "10px";
+    perfDiv.style.left = "10px";
+    perfDiv.style.background = "rgba(0,0,0,0.85)";
+    perfDiv.style.color = "white";
+    perfDiv.style.padding = "12px";
+    perfDiv.style.borderRadius = "8px";
+    perfDiv.style.fontSize = "14px";
+    perfDiv.style.zIndex = "1000";
+    perfDiv.innerHTML = `
+      <strong>📊 Quiz Performance</strong><br>
+      Total Questions: ${quizPerformance.totalQuestions}<br>
+      Attempted: ${quizPerformance.attempted}<br>
+      ✅ Correct: ${quizPerformance.correct}<br>
+      ❌ Wrong: ${quizPerformance.wrong}<br>
+      ⏱️ Time Taken: ${timeTaken} sec
+    `;
+    document.body.appendChild(perfDiv);
+
+    console.log("📊 Quiz Performance:", quizPerformance);
+  }
+
+  /* 
+  👉 Usage Example (to be triggered inside your quiz pages):
+    startQuiz(5);                // when quiz starts (say 5 questions)
+    submitAnswer(true);          // when user answers correctly
+    submitAnswer(false);         // when user answers wrong
+    endQuiz();                   // when quiz ends
+  */
 </script>
 </body>
 </html>
-
-
